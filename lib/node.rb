@@ -10,6 +10,6 @@ class Node
   end
 
   def add_edge(neighbor)
-    @neighbors << neighbor
+    @neighbors << neighbor unless @neighbors.include?(neighbor)
   end
 end

@@ -16,6 +16,5 @@ class Graph
 
   def add_edge(value1, value2)
     nodes[value1].add_edge(nodes[value2])
-    nodes[value2].add_edge(nodes[value1])
   end
 end
