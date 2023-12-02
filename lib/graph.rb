@@ -19,26 +19,41 @@ class Graph
     nodes[value2].add_edge(value1)
   end
 
-  def level_order(value, queue = [], visited = [])
-    return if nodes[value].nil?
-
-    queue.unshift(value)
-    visited << value
+  def bfs(start_point, end_point)
+    queue, visited, predecessor, distance = initial_variables(start_point)
     until queue.empty?
-      node = nodes[queue.pop]
-      block.call(node.value) if block_given?
-      node.neighbors.each { |neighbor| queue, visited = add_to_queue(neighbor, queue, visited) }
+      key = queue.pop
+      nodes[key].neighbors.each do |neighbor|
+        next if visited.include?(neighbor)
+
+        queue, visited, predecessor, distance = adjust_queue([key, neighbor], queue, visited, predecessor, distance)
+        return [distance, predecessor] if neighbor == end_point
+      end
     end
-    visited
+    nil
   end
 
   private
 
-  def add_to_queue(neighbor, queue, visited)
-    unless visited.include?(neighbor)
-      queue.unshift(neighbor)
-      visited << neighbor
-    end
-    [queue, visited]
+  def adjust_queue(nodes, queue, visited, predecessor, distance)
+    visited << nodes[1]
+    distance[nodes[1]] = distance[nodes[0]] + 1
+    predecessor[nodes[1]] = nodes[0]
+    queue.unshift(nodes[1])
+    [queue, visited, predecessor, distance]
+  end
+
+  def create_variables
+    queue = []
+    visited = []
+    predecessor = {}
+    distance = {}
+    [queue, visited, predecessor, distance]
+  end
+
+  def initial_variables(start_point)
+    queue, visited, predecessor, distance = create_variables
+    distance[start_point] = 0
+    [queue.unshift(start_point), visited << start_point, predecessor, distance]
   end
 end
