@@ -2,7 +2,7 @@
 
 # Graph's node
 class Node
-  attr_reader :value
+  attr_reader :value, :neighbors
 
   def initialize(value)
     @value = value
